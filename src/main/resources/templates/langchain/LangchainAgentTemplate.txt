@@ -1,0 +1,2 @@
+
+agent = initialize_agent(<tools>, <llm>, agent=<agent_type>, verbose=<verbose>, handle_parsing_errors=<handle_parsing_errors>)

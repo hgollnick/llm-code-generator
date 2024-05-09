@@ -1,4 +1,4 @@
-package frameworks.langchain.models;
+package frameworks.commons.models;
 
 /**
  * This class represents a tool model in the Langchain framework.

@@ -1,8 +1,9 @@
 import enums.LLM;
+import frameworks.commons.models.AgentModel;
 import frameworks.crewai.models.CrewAIAgentModel;
 import frameworks.crewai.models.CrewAICrewModel;
 import frameworks.crewai.models.CrewAITaskModel;
-import frameworks.langchain.models.ToolModel;
+import frameworks.commons.models.ToolModel;
 import org.junit.jupiter.api.Test;
 import templates.CrewAITemplate;
 import util.FileReader;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 
 public class CrewAIGenerationTest {
 
-    ArrayList<CrewAIAgentModel> agents = new ArrayList<>();
+    ArrayList<AgentModel> agents = new ArrayList<>();
     ArrayList<CrewAITaskModel> tasks = new ArrayList<>();
     ArrayList<ToolModel> tools = new ArrayList<>();
 
@@ -25,12 +26,12 @@ public class CrewAIGenerationTest {
         tool.setName("comments_api");
         tool.setFunc("comments_func");
         tool.setDescription("Use this tool to retrieve 'comments' from 'jsonplaceholder.typicode.com'");
-        tool.setCode(FileReader.readFile("src/main/resources/templates/langchain/tools/CommentsTool.txt"));
+        tool.setCode(FileReader.readFile("src/test/resources/templates/tools/CommentsTool.txt"));
         tools.add(tool);
         return tools;
     }
 
-    private ArrayList<CrewAIAgentModel> createAgents(LLM llm) {
+    private ArrayList<AgentModel> createAgents(LLM llm) {
         agent.setName("researcher");
         agent.setRole("Senior Researcher");
         agent.setGoal("Uncover groundbreaking technologies in {topic}");
@@ -60,16 +61,17 @@ public class CrewAIGenerationTest {
         inputs.put("topic", "AI");
 
         CrewAITemplate crewAITemplate = new CrewAITemplate();
-        crewAITemplate.load(llm, createTools(), createAgents(llm), createTasks(), new CrewAICrewModel(), Parser.inputParser(inputs));
+        System.out.println(crewAITemplate.loadCrewAI(
+                llm, createTools(), createAgents(llm), createTasks(), new CrewAICrewModel(), Parser.inputParser(inputs)));
     }
 
     @Test
-    public void testGroq() {
+    public void testCrewAIGroq() {
         buildCrewAI(LLM.GROQ);
     }
 
     @Test
-    public void testAzureOpenAI() {
+    public void testCrewAIAzure() {
         buildCrewAI(LLM.AZURE);
     }
 

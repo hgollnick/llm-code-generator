@@ -2,10 +2,8 @@ package templates;
 
 import constants.TemplateConstants;
 import enums.LLM;
-import frameworks.crewai.models.CrewAIAgentModel;
-import frameworks.crewai.models.CrewAICrewModel;
-import frameworks.crewai.models.CrewAITaskModel;
-import frameworks.langchain.models.ToolModel;
+import frameworks.commons.models.AgentModel;
+import frameworks.commons.models.ToolModel;
 import util.FileReader;
 
 import java.util.ArrayList;
@@ -29,21 +27,17 @@ public abstract class BaseTemplate {
      * @param llm The largue language model.
      * @param tools The list of tools.
      * @param agents The list of agents.
-     * @param tasks The list of tasks.
-     * @param crew The crew.
      * @param inputs The inputs.
      */
-    public void load(LLM llm, ArrayList<ToolModel> tools, ArrayList<CrewAIAgentModel> agents,
-                     ArrayList<CrewAITaskModel> tasks, CrewAICrewModel crew, String inputs) {
+    public String load(LLM llm, ArrayList<ToolModel> tools, ArrayList<AgentModel> agents, String inputs) {
         StringBuilder sb = new StringBuilder();
         sb.append(createImports(llm));
         sb.append(createLLM(llm));
         sb.append(createTools(tools));
         sb.append(createAgents(agents));
-        sb.append(createTasks(tasks));
-        sb.append(createCrew(crew));
+        sb.append("<complement>");
         sb.append(createRunMethod(inputs));
-        System.out.println(sb);
+        return sb.toString();
     }
 
     /**
@@ -62,7 +56,25 @@ public abstract class BaseTemplate {
      * @param llm The local learning model.
      * @return A string representing the created local learning model.
      */
-    protected abstract String createLLM(LLM llm);
+    protected String createLLM(LLM llm) {
+        String content;
+        switch (llm) {
+            case AZURE:
+                content = FileReader.readFile(TemplateConstants.AZURE_OPENAI);
+                content = content.replace("<azure_endpoint>", System.getenv("azure_endpoint"));
+                content = content.replace("<api_key>", System.getenv("azure_openai_api_key"));
+                content = content.replace("<azure_deployment>", System.getenv("azure_deployment"));
+                content = content.replace("<api_version>", System.getenv("azure_api_version"));
+                return content;
+            case GROQ:
+                content = FileReader.readFile(TemplateConstants.GROQ);
+                content = content.replace("<api_key>", System.getenv("groq_api_key"));
+                content = content.replace("<model>", System.getenv("groq_model"));
+                return content;
+            default:
+                return "";
+        }
+    };
 
     /**
      * This method creates a string representation of the tools.
@@ -93,25 +105,7 @@ public abstract class BaseTemplate {
      * @param agents The list of agents.
      * @return The created agents.
      */
-    protected abstract String createAgents(ArrayList<CrewAIAgentModel> agents);
-
-    /**
-     * This method creates the tasks.
-     * It should be overridden by subclasses.
-     *
-     * @param tasks The list of tasks.
-     * @return The created tasks.
-     */
-    protected abstract String createTasks(ArrayList<CrewAITaskModel> tasks);
-
-    /**
-     * This method creates the crew.
-     * It should be overridden by subclasses.
-     *
-     * @param crew The crew.
-     * @return The created crew.
-     */
-    protected abstract String createCrew(CrewAICrewModel crew);
+    protected abstract String createAgents(ArrayList<AgentModel> agents);
 
     /**
      * This method creates the run method.

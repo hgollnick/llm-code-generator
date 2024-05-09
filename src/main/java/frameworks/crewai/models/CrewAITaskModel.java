@@ -1,6 +1,6 @@
 package frameworks.crewai.models;
 
-import frameworks.langchain.models.ToolModel;
+import frameworks.commons.models.ToolModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;

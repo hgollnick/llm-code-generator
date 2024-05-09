@@ -6,9 +6,14 @@ package constants;
  */
 public class TemplateConstants {
 
+
+    // Commons
     public static final String GROQ = "src/main/resources/LLM/GroqTemplate.txt";
     public static final String AZURE_OPENAI = "src/main/resources/LLM/AzureOpenAITemplate.txt";
 
+    public static final String TOOL = "src/main/resources/templates/commons/ToolTemplate.txt";
+
+    // CrewAI
     public static final String CREWAI_AGENT = "src/main/resources/templates/crewai/CrewAIAgentTemplate.txt";
     public static final String CREWAI_TASK = "src/main/resources/templates/crewai/CrewAITaskTemplate.txt";
     public static final String CREWAI_CREW = "src/main/resources/templates/crewai/CrewAICrewTemplate.txt";
@@ -17,5 +22,13 @@ public class TemplateConstants {
     public static final String CREWAI_GROQ = "src/main/resources/templates/crewai/imports/CrewAIGroqTemplate.txt";
     public static final String CREWAI_AZURE = "src/main/resources/templates/crewai/imports/CrewAIAzureTemplate.txt";
 
-    public static final String TOOL = "src/main/resources/templates/langchain/ToolTemplate.txt";
+    // Langchain
+    public static final String LANGCHAIN_AGENT = "src/main/resources/templates/langchain/LangchainAgentTemplate.txt";
+    public static final String LANGCHAIN_RUN = "src/main/resources/templates/langchain/LangchainRunTemplate.txt";
+
+    public static final String LANGCHAIN_GROQ = "src/main/resources/templates/langchain/imports/LangchainGroqTemplate.txt";
+    public static final String LANGCHAIN_AZURE = "src/main/resources/templates/langchain/imports/LangchainAzureTemplate.txt";
+
+
+
 }

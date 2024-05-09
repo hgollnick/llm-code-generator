@@ -1,28 +1,19 @@
 package frameworks.crewai.models;
 
-import enums.LLM;
-import frameworks.langchain.models.ToolModel;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+import frameworks.commons.models.AgentModel;
 
 /**
  * This class represents a model for an Agent in the CrewAI framework.
  * It contains several properties related to the agent's role, goal, verbosity, memory, backstory,
  * Large Language Model (LLM), tools, and delegation allowance.
  */
-public class CrewAIAgentModel {
-
-    private String name;
+public class CrewAIAgentModel extends AgentModel {
 
     // Python Agent properties
     private String role;
     private String goal;
-    private boolean verbose = true;
     private boolean memory = true;
     private String backstory;
-    private LLM llm;
-    private ArrayList<ToolModel> tools;
     private boolean allow_delegation = true;
 
     /**
@@ -36,39 +27,16 @@ public class CrewAIAgentModel {
      *
      * @param role             The role of the agent.
      * @param goal             The goal of the agent.
-     * @param verbose          The verbosity flag of the agent.
      * @param memory           The memory flag of the agent.
      * @param backstory        The backstory of the agent.
-     * @param llm              The local learning model of the agent.
-     * @param tools            The tools of the agent.
      * @param allow_delegation The delegation allowance flag of the agent.
      */
-    public CrewAIAgentModel(String role, String goal, boolean verbose, boolean memory, String backstory,
-                            LLM llm, ArrayList<ToolModel> tools, boolean allow_delegation) {
+    public CrewAIAgentModel(String role, String goal, boolean memory, String backstory, boolean allow_delegation) {
         this.role = role;
         this.goal = goal;
-        this.verbose = verbose;
         this.memory = memory;
         this.backstory = backstory;
-        this.llm = llm;
-        this.tools = tools;
         this.allow_delegation = allow_delegation;
-    }
-
-    /**
-     * @return The name of the agent.
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the name of the agent.
-     *
-     * @param name The new name of the agent.
-     */
-    public void setName(String name) {
-        this.name = name.toLowerCase();
     }
 
     /**
@@ -104,22 +72,6 @@ public class CrewAIAgentModel {
     }
 
     /**
-     * @return The verbosity flag of the agent.
-     */
-    public boolean isVerbose() {
-        return verbose;
-    }
-
-    /**
-     * Sets the verbosity flag of the agent.
-     *
-     * @param verbose The new verbosity flag of the agent.
-     */
-    public void setVerbose(boolean verbose) {
-        this.verbose = verbose;
-    }
-
-    /**
      * @return The memory flag of the agent.
      */
     public boolean isMemory() {
@@ -152,38 +104,6 @@ public class CrewAIAgentModel {
     }
 
     /**
-     * @return The local learning model of the agent.
-     */
-    public LLM getLlm() {
-        return llm;
-    }
-
-    /**
-     * Sets the local learning model of the agent.
-     *
-     * @param llm The new local learning model of the agent.
-     */
-    public void setLlm(LLM llm) {
-        this.llm = llm;
-    }
-
-    /**
-     * @return The tools of the agent.
-     */
-    public ArrayList<ToolModel> getTools() {
-        return tools;
-    }
-
-    /**
-     * Sets the tools of the agent.
-     *
-     * @param tools The new tools of the agent.
-     */
-    public void setTools(ArrayList<ToolModel> tools) {
-        this.tools = tools;
-    }
-
-    /**
      * @return The delegation allowance flag of the agent.
      */
     public boolean isAllow_delegation() {
@@ -197,18 +117,5 @@ public class CrewAIAgentModel {
      */
     public void setAllow_delegation(boolean allow_delegation) {
         this.allow_delegation = allow_delegation;
-    }
-
-    /**
-     * This method retrieves the names of all the tools associated with the agent.
-     * It uses Java 8 streams to map each ToolModel object to its name, and then collects these names into an array.
-     * The array of names is then converted to a string for easy display.
-     *
-     * @return A string representation of an array containing the names of all the tools.
-     */
-    public String getToolNames() {
-        return Arrays.toString(tools.stream()
-                .map(ToolModel::getName)
-                .toArray(String[]::new));
     }
 }

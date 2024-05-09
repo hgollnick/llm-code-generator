@@ -2,6 +2,8 @@ package templates;
 
 import constants.TemplateConstants;
 import enums.LLM;
+import frameworks.commons.models.AgentModel;
+import frameworks.commons.models.ToolModel;
 import frameworks.crewai.models.CrewAIAgentModel;
 import frameworks.crewai.models.CrewAICrewModel;
 import frameworks.crewai.models.CrewAITaskModel;
@@ -15,6 +17,19 @@ import java.util.ArrayList;
  * It overrides the abstract methods in the BaseTemplate class to provide the specific implementation for CrewAI.
  */
 public class CrewAITemplate extends BaseTemplate {
+
+    public String loadCrewAI(LLM llm, ArrayList<ToolModel> tools, ArrayList<AgentModel> agents,
+                       ArrayList<CrewAITaskModel> tasks, CrewAICrewModel crew, String inputs) {
+        String str = super.load(llm, tools, agents, inputs);
+
+        StringBuilder complement = new StringBuilder();
+        complement.append(createTasks(tasks));
+        complement.append(createCrew(crew));
+
+        str = str.replace("<complement>", complement.toString());
+
+        return str;
+    }
 
     /**
      * This method is responsible for creating the necessary imports for the CrewAI template.
@@ -35,46 +50,16 @@ public class CrewAITemplate extends BaseTemplate {
     }
 
     /**
-     * This method creates the large language model (LLM) for the CrewAI template.
-     * Depending on the type of LLM (Azure or Groq), it reads the corresponding template file and replaces placeholders with environment variables.
-     * For Azure, it replaces placeholders for the Azure endpoint, API key, Azure deployment, and API version.
-     * For Groq, it replaces placeholders for the API key and model.
-     * If the LLM type is not Azure or Groq, it returns an empty string.
-     *
-     * @param llm The type of the large language model (LLM).
-     * @return The created large language model as a string. If the LLM type is not Azure or Groq, it returns an empty string.
-     */
-    @Override
-    public String createLLM(LLM llm) {
-        String content;
-        switch (llm) {
-            case AZURE:
-                content = FileReader.readFile(TemplateConstants.AZURE_OPENAI);
-                content = content.replace("<azure_endpoint>", System.getenv("azure_endpoint"));
-                content = content.replace("<api_key>", System.getenv("azure_openai_api_key"));
-                content = content.replace("<azure_deployment>", System.getenv("azure_deployment"));
-                content = content.replace("<api_version>", System.getenv("api_version"));
-                return content;
-            case GROQ:
-                content = FileReader.readFile(TemplateConstants.GROQ);
-                content = content.replace("<api_key>", System.getenv("groq_api_key"));
-                content = content.replace("<model>", System.getenv("model"));
-                return content;
-            default:
-                return "";
-        }
-    }
-
-    /**
      * This method creates the agents for the CrewAI template.
      *
      * @param agents The list of agents.
      * @return The created agents as a string.
      */
     @Override
-    protected String createAgents(ArrayList<CrewAIAgentModel> agents) {
+    protected String createAgents(ArrayList<AgentModel> agents) {
         StringBuilder agentsString = new StringBuilder();
-        for (CrewAIAgentModel agent : agents) {
+        for (AgentModel a : agents) {
+            CrewAIAgentModel agent = (CrewAIAgentModel) a;
             getAgentNames().add(agent.getName());
                 String content = FileReader.readFile(TemplateConstants.CREWAI_AGENT);
                 content = content.replace("<name>", agent.getName());
@@ -97,7 +82,6 @@ public class CrewAITemplate extends BaseTemplate {
      * @param tasks The list of tasks.
      * @return The created tasks as a string.
      */
-    @Override
     protected String createTasks(ArrayList<CrewAITaskModel> tasks) {
         StringBuilder tasksString = new StringBuilder();
         for (CrewAITaskModel task : tasks) {
@@ -119,7 +103,6 @@ public class CrewAITemplate extends BaseTemplate {
      * @param crew The crew.
      * @return The created crew as a string.
      */
-    @Override
     protected String createCrew(CrewAICrewModel crew) {
         String content = FileReader.readFile(TemplateConstants.CREWAI_CREW);
         content = content.replace("<agents>", getAgentNames().toString());
