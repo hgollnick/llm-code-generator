@@ -1,0 +1,7 @@
+
+AZURE = AzureChatOpenAI(
+    azure_endpoint="<azure_endpoint>",
+    api_key="<api_key>",
+    azure_deployment="<azure_deployment>",
+    api_version="<api_version>"
+)

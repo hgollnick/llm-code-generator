@@ -1,0 +1,9 @@
+
+crew = Crew(
+  agents=<agents>,
+  tasks=<tasks>,
+  process=<process>,
+  cache=<cache>,
+  max_rpm=<max_rpm>,
+  share_crew=<share_crew>
+)

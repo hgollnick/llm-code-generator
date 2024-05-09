@@ -1,0 +1,11 @@
+
+<name> = Agent(
+  role="<role>",
+  goal="<goal>",
+  verbose=<verbose>,
+  memory=<memory>,
+  backstory="<backstory>",
+  llm=<llm>,
+  tools=<tools>,
+  allow_delegation=<allow_delegation>,
+)

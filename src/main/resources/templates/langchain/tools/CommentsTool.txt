@@ -1,0 +1,7 @@
+    import requests
+
+    try:
+        response = requests.get("https://jsonplaceholder.typicode.com/comments/1")
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return f"Error fetching comments: {e}"

@@ -1,0 +1,7 @@
+
+<name> = Task(
+  description="<description>",
+  expected_output="<expected_output>",
+  tools=<tools>,
+  agent=<agent>,
+)

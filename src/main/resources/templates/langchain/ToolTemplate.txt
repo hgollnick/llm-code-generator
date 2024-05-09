@@ -1,0 +1,9 @@
+
+def <func>(__query__):
+<code>
+
+<name> = Tool(
+  name="<name>",
+  func=<func>,
+  description="<description>"
+)

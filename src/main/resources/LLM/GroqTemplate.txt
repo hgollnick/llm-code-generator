@@ -1,0 +1,5 @@
+
+GROQ = ChatGroq(
+    api_key="<api_key>",
+    model="<model>"
+)
