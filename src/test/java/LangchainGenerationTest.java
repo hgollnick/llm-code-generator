@@ -4,7 +4,7 @@ import frameworks.commons.models.ToolModel;
 import frameworks.langchain.models.LangchainAgentModel;
 import org.junit.jupiter.api.Test;
 import templates.LangchainTemplate;
-import util.FileReader;
+import util.FileUtil;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public class LangchainGenerationTest {
         tool.setName("comments_api");
         tool.setFunc("comments_func");
         tool.setDescription("Use this tool to retrieve 'comments' from 'jsonplaceholder.typicode.com'");
-        tool.setCode(FileReader.readFile("src/test/resources/templates/tools/CommentsTool.txt"));
+        tool.setCode(FileUtil.readFile("src/test/resources/templates/tools/CommentsTool.txt"));
         tools.add(tool);
         return tools;
     }
@@ -35,8 +35,7 @@ public class LangchainGenerationTest {
 
 
     public void buildLangchain(LLM llm) {
-        LangchainTemplate langchainTemplate = new LangchainTemplate();
-        System.out.println(langchainTemplate.loadLangchain(
+        System.out.println(new LangchainTemplate().loadLangchain(
                 llm, createTools(), createAgents(llm), "Get me the comment with ID 1"));
     }
 
@@ -51,4 +50,13 @@ public class LangchainGenerationTest {
     }
 
 
+    @Test
+    public void testLangchainGroqRequirements() {
+        System.out.println(new LangchainTemplate().createRequirements(LLM.GROQ));
+    }
+
+    @Test
+    public void testLangchainAzureRequirements() {
+        System.out.println(new LangchainTemplate().createRequirements(LLM.AZURE));
+    }
 }

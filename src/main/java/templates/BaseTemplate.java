@@ -4,7 +4,7 @@ import constants.TemplateConstants;
 import enums.LLM;
 import frameworks.commons.models.AgentModel;
 import frameworks.commons.models.ToolModel;
-import util.FileReader;
+import util.FileUtil;
 
 import java.util.ArrayList;
 
@@ -60,14 +60,14 @@ public abstract class BaseTemplate {
         String content;
         switch (llm) {
             case AZURE:
-                content = FileReader.readFile(TemplateConstants.AZURE_OPENAI);
+                content = FileUtil.readFile(TemplateConstants.AZURE_OPENAI);
                 content = content.replace("<azure_endpoint>", System.getenv("azure_endpoint"));
                 content = content.replace("<api_key>", System.getenv("azure_openai_api_key"));
                 content = content.replace("<azure_deployment>", System.getenv("azure_deployment"));
                 content = content.replace("<api_version>", System.getenv("azure_api_version"));
                 return content;
             case GROQ:
-                content = FileReader.readFile(TemplateConstants.GROQ);
+                content = FileUtil.readFile(TemplateConstants.GROQ);
                 content = content.replace("<api_key>", System.getenv("groq_api_key"));
                 content = content.replace("<model>", System.getenv("groq_model"));
                 return content;
@@ -88,7 +88,7 @@ public abstract class BaseTemplate {
         StringBuilder toolsString = new StringBuilder();
         for (ToolModel tool : tools) {
             getToolNames().add(tool.getName());
-            String content = FileReader.readFile(TemplateConstants.TOOL);
+            String content = FileUtil.readFile(TemplateConstants.TOOL);
             content = content.replace("<name>", tool.getName());
             content = content.replace("<func>", tool.getFunc());
             content = content.replace("<description>", tool.getDescription());
@@ -142,4 +142,13 @@ public abstract class BaseTemplate {
     public ArrayList<String> getToolNames() {
         return toolNames;
     }
+
+    /**
+     * This abstract method is responsible for creating the requirements.txt file.
+     * It should be overridden by subclasses to provide the specific implementation.
+     *
+     * @param llm The large learning model.
+     * @return A string representing the created imports.
+     */
+    public abstract String createRequirements(LLM llm);
 }

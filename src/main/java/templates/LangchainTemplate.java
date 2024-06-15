@@ -5,7 +5,7 @@ import enums.LLM;
 import frameworks.commons.models.AgentModel;
 import frameworks.commons.models.ToolModel;
 import frameworks.langchain.models.LangchainAgentModel;
-import util.FileReader;
+import util.FileUtil;
 import util.Parser;
 
 import java.util.ArrayList;
@@ -45,8 +45,8 @@ public class LangchainTemplate extends BaseTemplate {
     @Override
     protected String createImports(LLM llm) {
         return switch (llm) {
-            case AZURE -> FileReader.readFile(TemplateConstants.LANGCHAIN_AZURE);
-            case GROQ -> FileReader.readFile(TemplateConstants.LANGCHAIN_GROQ);
+            case AZURE -> FileUtil.readFile(TemplateConstants.LANGCHAIN_AZURE);
+            case GROQ -> FileUtil.readFile(TemplateConstants.LANGCHAIN_GROQ);
         };
     }
 
@@ -64,7 +64,7 @@ public class LangchainTemplate extends BaseTemplate {
         for (AgentModel a : agents) {
             LangchainAgentModel agent = (LangchainAgentModel) a;
             getAgentNames().add(agent.getName());
-            String content = FileReader.readFile(TemplateConstants.LANGCHAIN_AGENT);
+            String content = FileUtil.readFile(TemplateConstants.LANGCHAIN_AGENT);
             content = content.replace("<name>", agent.getName());
             content = content.replace("<tools>", agent.getToolNames());
             content = content.replace("<llm>", agent.getLlm().toString());
@@ -86,7 +86,25 @@ public class LangchainTemplate extends BaseTemplate {
      */
     @Override
     protected String createRunMethod(String inputs) {
-        String content = FileReader.readFile(TemplateConstants.LANGCHAIN_RUN);
+        String content = FileUtil.readFile(TemplateConstants.LANGCHAIN_RUN);
         return content.replace("<inputs>", inputs);
+    }
+
+    /**
+     * This method is responsible for creating the necessary requirements for the Langchain python code.
+     * It uses a switch statement to check the type of the large language model (LLM).
+     * If the LLM is Azure, it reads the Azure template file.
+     * If the LLM is Groq, it reads the Groq template file.
+     * The method uses the FileReader utility to read the template files.
+     *
+     * @param llm The type of the large language model (LLM).
+     * @return A string containing the created imports. If the LLM is Azure, it returns the Azure imports. If the LLM is Groq, it returns the Groq imports.
+     */
+    @Override
+    public String createRequirements(LLM llm) {
+        return switch (llm) {
+            case AZURE -> FileUtil.readFile(TemplateConstants.LANGCHAIN_AZURE_REQUIREMENTS);
+            case GROQ -> FileUtil.readFile(TemplateConstants.LANGCHAIN_GROQ_REQUIREMENTS);
+        };
     }
 }

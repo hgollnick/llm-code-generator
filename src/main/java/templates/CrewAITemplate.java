@@ -7,7 +7,7 @@ import frameworks.commons.models.ToolModel;
 import frameworks.crewai.models.CrewAIAgentModel;
 import frameworks.crewai.models.CrewAICrewModel;
 import frameworks.crewai.models.CrewAITaskModel;
-import util.FileReader;
+import util.FileUtil;
 import util.Parser;
 
 import java.util.ArrayList;
@@ -44,8 +44,8 @@ public class CrewAITemplate extends BaseTemplate {
     @Override
     protected String createImports(LLM llm) {
         return switch (llm) {
-            case AZURE -> FileReader.readFile(TemplateConstants.CREWAI_AZURE);
-            case GROQ -> FileReader.readFile(TemplateConstants.CREWAI_GROQ);
+            case AZURE -> FileUtil.readFile(TemplateConstants.CREWAI_AZURE);
+            case GROQ -> FileUtil.readFile(TemplateConstants.CREWAI_GROQ);
         };
     }
 
@@ -61,7 +61,7 @@ public class CrewAITemplate extends BaseTemplate {
         for (AgentModel a : agents) {
             CrewAIAgentModel agent = (CrewAIAgentModel) a;
             getAgentNames().add(agent.getName());
-                String content = FileReader.readFile(TemplateConstants.CREWAI_AGENT);
+                String content = FileUtil.readFile(TemplateConstants.CREWAI_AGENT);
                 content = content.replace("<name>", agent.getName());
                 content = content.replace("<role>", agent.getRole());
                 content = content.replace("<goal>", agent.getGoal());
@@ -86,7 +86,7 @@ public class CrewAITemplate extends BaseTemplate {
         StringBuilder tasksString = new StringBuilder();
         for (CrewAITaskModel task : tasks) {
             getTaskNames().add(task.getName());
-            String content = FileReader.readFile(TemplateConstants.CREWAI_TASK);
+            String content = FileUtil.readFile(TemplateConstants.CREWAI_TASK);
             content = content.replace("<name>", task.getName());
             content = content.replace("<description>", task.getDescription());
             content = content.replace("<expected_output>", task.getExpected_output());
@@ -104,7 +104,7 @@ public class CrewAITemplate extends BaseTemplate {
      * @return The created crew as a string.
      */
     protected String createCrew(CrewAICrewModel crew) {
-        String content = FileReader.readFile(TemplateConstants.CREWAI_CREW);
+        String content = FileUtil.readFile(TemplateConstants.CREWAI_CREW);
         content = content.replace("<agents>", getAgentNames().toString());
         content = content.replace("<tasks>", getTaskNames().toString());
         content = content.replace("<process>", crew.getProcess());
@@ -122,8 +122,25 @@ public class CrewAITemplate extends BaseTemplate {
      */
     @Override
     protected String createRunMethod(String inputs) {
-        String content = FileReader.readFile(TemplateConstants.CREWAI_RUN);
+        String content = FileUtil.readFile(TemplateConstants.CREWAI_RUN);
         return content.replace("<inputs>", inputs);
     }
 
+    /**
+     * This method is responsible for creating the necessary requirements for the CrewAI python code.
+     * It uses a switch statement to check the type of the large language model (LLM).
+     * If the LLM is Azure, it reads the Azure template file.
+     * If the LLM is Groq, it reads the Groq template file.
+     * The method uses the FileReader utility to read the template files.
+     *
+     * @param llm The type of the large language model (LLM).
+     * @return A string containing the created imports. If the LLM is Azure, it returns the Azure imports. If the LLM is Groq, it returns the Groq imports.
+     */
+    @Override
+    public String createRequirements(LLM llm) {
+        return switch (llm) {
+            case AZURE -> FileUtil.readFile(TemplateConstants.CREWAI_AZURE_REQUIREMENTS);
+            case GROQ -> FileUtil.readFile(TemplateConstants.CREWAI_GROQ_REQUIREMENTS);
+        };
+    }
 }

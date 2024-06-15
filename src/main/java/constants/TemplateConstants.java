@@ -22,6 +22,9 @@ public class TemplateConstants {
     public static final String CREWAI_GROQ = "src/main/resources/templates/crewai/imports/CrewAIGroqTemplate.txt";
     public static final String CREWAI_AZURE = "src/main/resources/templates/crewai/imports/CrewAIAzureTemplate.txt";
 
+    public static final String CREWAI_GROQ_REQUIREMENTS = "src/main/resources/templates/crewai/requirements/CrewAIGroqRequirements.txt";
+    public static final String CREWAI_AZURE_REQUIREMENTS = "src/main/resources/templates/crewai/requirements/CrewAIAzureRequirements.txt";
+
     // Langchain
     public static final String LANGCHAIN_AGENT = "src/main/resources/templates/langchain/LangchainAgentTemplate.txt";
     public static final String LANGCHAIN_RUN = "src/main/resources/templates/langchain/LangchainRunTemplate.txt";
@@ -29,6 +32,7 @@ public class TemplateConstants {
     public static final String LANGCHAIN_GROQ = "src/main/resources/templates/langchain/imports/LangchainGroqTemplate.txt";
     public static final String LANGCHAIN_AZURE = "src/main/resources/templates/langchain/imports/LangchainAzureTemplate.txt";
 
-
+    public static final String LANGCHAIN_GROQ_REQUIREMENTS = "src/main/resources/templates/langchain/requirements/LangchainGroqRequirements.txt";
+    public static final String LANGCHAIN_AZURE_REQUIREMENTS = "src/main/resources/templates/langchain/requirements/LangchainAzureRequirements.txt";
 
 }

@@ -6,9 +6,10 @@ import frameworks.crewai.models.CrewAITaskModel;
 import frameworks.commons.models.ToolModel;
 import org.junit.jupiter.api.Test;
 import templates.CrewAITemplate;
-import util.FileReader;
+import util.FileUtil;
 import util.Parser;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -26,7 +27,7 @@ public class CrewAIGenerationTest {
         tool.setName("comments_api");
         tool.setFunc("comments_func");
         tool.setDescription("Use this tool to retrieve 'comments' from 'jsonplaceholder.typicode.com'");
-        tool.setCode(FileReader.readFile("src/test/resources/templates/tools/CommentsTool.txt"));
+        tool.setCode(FileUtil.readFile("src/test/resources/templates/tools/CommentsTool.txt"));
         tools.add(tool);
         return tools;
     }
@@ -56,24 +57,32 @@ public class CrewAIGenerationTest {
         return tasks;
     }
 
-    public void buildCrewAI(LLM llm) {
+    public String buildCrewAI(LLM llm) {
         HashMap<String, String> inputs = new HashMap<>();
         inputs.put("topic", "AI");
 
-        CrewAITemplate crewAITemplate = new CrewAITemplate();
-        System.out.println(crewAITemplate.loadCrewAI(
-                llm, createTools(), createAgents(llm), createTasks(), new CrewAICrewModel(), Parser.inputParser(inputs)));
+        return new CrewAITemplate().loadCrewAI(
+                llm, createTools(), createAgents(llm), createTasks(), new CrewAICrewModel(), Parser.inputParser(inputs));
     }
 
     @Test
     public void testCrewAIGroq() {
-        buildCrewAI(LLM.GROQ);
+        System.out.println(buildCrewAI(LLM.GROQ));
     }
 
     @Test
     public void testCrewAIAzure() {
-        buildCrewAI(LLM.AZURE);
+        System.out.println(buildCrewAI(LLM.AZURE));
     }
 
+    @Test
+    public void testCrewAIGroqRequirements() {
+        System.out.println(new CrewAITemplate().createRequirements(LLM.GROQ));
+    }
+
+    @Test
+    public void testCrewAIAzureRequirements() {
+        System.out.println(new CrewAITemplate().createRequirements(LLM.AZURE));
+    }
 
 }
